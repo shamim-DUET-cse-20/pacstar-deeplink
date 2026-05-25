@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting to Pacstar...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif;">
+        <h2 id="status">Redirecting...</h2>
+    </div>
+    <script>
+        const userAgent = navigator.userAgent.toLowerCase();
+        const path = window.location.pathname; // e.g., "/product/123"
+        const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+        const ANDROID_PACKAGE = "com.pacstar.app";
+        const PLAY_STORE = "https://play.google.com/store/apps/details?id=" + ANDROID_PACKAGE;
+        const APP_STORE = "https://apps.apple.com/ae/app/pacstar/id6761512041"; // TODO: Replace with actual iOS ID
+        // Android Intent URI
+        // Example: intent://product/123#Intent;scheme=pacstar;package=com.pacstar.app;end
+        const androidIntent = "intent://" + cleanPath + "#Intent;scheme=pacstar;package=" + ANDROID_PACKAGE + ";end";
+        // iOS Custom Scheme URI
+        // Example: pacstar://product/123
+        const iosScheme = "pacstar://" + cleanPath;
+        const statusLabel = document.getElementById('status');
+        if (/android/.test(userAgent)) {
+            window.location.href = androidIntent;
+            setTimeout(() => {
+                window.location.href = PLAY_STORE;
+            }, 2500);
+        } else if (/iphone|ipad|ipod/.test(userAgent)) {
+            window.location.href = iosScheme;
+            setTimeout(() => {
+                window.location.href = APP_STORE;
+            }, 2500);
+        } else {
+            statusLabel.innerHTML = "<h2>Please open this link on your mobile device to view in the app</h2>";
+        }
+    </script>
+</body>
+
+</html>
